@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MyCareHub</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='9' fill='%23e5202e'/><path d='M16 24s-8-4.7-8-10.2A4.6 4.6 0 0 1 16 11a4.6 4.6 0 0 1 8 2.8C24 19.3 16 24 16 24z' fill='white'/></svg>">
+  <link rel="stylesheet" href="/static/styles.css">
+  <script>try{const t=localStorage.getItem("mch-theme");if(t)document.documentElement.dataset.theme=t;}catch(e){}</script>
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <span class="logo" aria-hidden="true"><svg viewBox="0 0 32 32"><rect width="32" height="32" rx="9"/><path d="M16 24s-8-4.7-8-10.2A4.6 4.6 0 0 1 16 11a4.6 4.6 0 0 1 8 2.8C24 19.3 16 24 16 24z"/></svg></span>
+      <div><div class="brand-name">MyCare<b>Hub</b></div><div class="brand-sub">Your care, connected</div></div>
+    </div>
+    <div class="top-actions">
+      <label class="member-pick"><span class="sr-only">Signed in as</span><select id="member" aria-label="Member"></select></label>
+      <button class="icon-btn" id="bell" type="button" aria-label="Notifications">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8M10 20a2 2 0 0 0 4 0"/></svg>
+        <span class="dot" id="bell-count" hidden></span>
+      </button>
+      <button class="icon-btn" id="theme" type="button" aria-label="Switch light or dark theme" title="Switch theme">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div>
+        <h1 id="greeting">Hello</h1>
+        <p class="muted" id="plan"></p>
+      </div>
+      <div class="stats" id="stats"></div>
+    </section>
+
+    <div class="layout">
+      <section class="card" aria-labelledby="req-title">
+        <h2 id="req-title">Request care</h2>
+        <form id="form" autocomplete="off">
+          <fieldset class="types">
+            <legend>What do you need?</legend>
+            <label class="type"><input type="radio" name="type" value="appointment" checked><span><b>Appointment</b><small>See a clinician</small></span></label>
+            <label class="type"><input type="radio" name="type" value="prescription_refill"><span><b>Prescription refill</b><small>Send to your pharmacy</small></span></label>
+            <label class="type"><input type="radio" name="type" value="referral"><span><b>Referral</b><small>See a specialist</small></span></label>
+            <label class="type"><input type="radio" name="type" value="lab_results"><span><b>Lab results</b><small>Release to your chart</small></span></label>
+          </fieldset>
+          <fieldset>
+            <legend>How soon?</legend>
+            <div class="seg" role="radiogroup">
+              <label><input type="radio" name="urgency" value="routine" checked><span>Routine</span></label>
+              <label><input type="radio" name="urgency" value="soon"><span>Soon</span></label>
+              <label><input type="radio" name="urgency" value="urgent"><span>Urgent</span></label>
+            </div>
+          </fieldset>
+          <div class="row" id="date-row">
+            <label for="date">Preferred date</label>
+            <input type="date" id="date">
+          </div>
+          <div class="row">
+            <label for="notes">Notes for your care team <span class="muted">(optional)</span></label>
+            <textarea id="notes" rows="3" maxlength="500" placeholder="Anything we should know?"></textarea>
+          </div>
+          <button class="btn primary" type="submit" id="submit">Send request</button>
+          <div id="result" aria-live="polite"></div>
+        </form>
+      </section>
+
+      <section class="card" aria-labelledby="list-title">
+        <div class="card-head"><h2 id="list-title">My requests</h2><span class="muted small" id="live">updating live</span></div>
+        <div id="requests" class="requests"></div>
+      </section>
+    </div>
+  </main>
+
+  <aside class="panel" id="panel" aria-hidden="true" aria-label="Notifications">
+    <div class="panel-head"><h2>Notifications</h2><button class="icon-btn" id="panel-close" type="button" aria-label="Close">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div id="notes-list" class="notes"></div>
+  </aside>
+
+  <footer class="foot">Demo environment with synthetic members. MyCareHub sends requests through the Integration Layer
+    (workflow <code>care_request</code>) and receives results by signed callback.</footer>
+  <script src="/static/app.js"></script>
+</body>
+</html>

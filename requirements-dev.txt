@@ -1,0 +1,6 @@
+-r integration_layer/requirements.txt
+-r consumer_application/requirements.txt
+-r console/requirements.txt
+-r wwmg_source/requirements.txt
+-r mycarehub/requirements.txt
+pytest==9.1.1

@@ -1,0 +1,33 @@
+# Use real Google BigQuery instead of the emulator:
+#
+#   1. Put a service-account key with BigQuery Data Editor + Job User on the dataset's project at
+#      ./secrets/gcp-service-account.json   (the folder is git-ignored)
+#   2. Set BQ_PROJECT (and optionally BQ_DATASET, BQ_LOCATION) in .env
+#   3. docker compose -f docker-compose.yml -f docker-compose.gcp.yml up -d --build
+#
+# The emulator container still starts but nothing uses it.
+x-gcp: &gcp
+  BQ_EMULATOR_HOST: ""
+  GOOGLE_APPLICATION_CREDENTIALS: /run/secrets/gcp-service-account.json
+
+x-gcp-volume: &gcp-volume
+  - ./secrets/gcp-service-account.json:/run/secrets/gcp-service-account.json:ro
+
+services:
+  migrate:
+    environment: *gcp
+    volumes: *gcp-volume
+  il-api:
+    environment: *gcp
+    volumes: *gcp-volume
+  il-scheduler:
+    environment: *gcp
+    volumes: *gcp-volume
+  consumer-application:
+    environment:
+      <<: *gcp
+      CONSUMER_BQ_POLL_SECONDS: "20"    # each poll is a billed query on real BigQuery
+    volumes: *gcp-volume
+  console:
+    environment: *gcp
+    volumes: *gcp-volume
